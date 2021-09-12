@@ -1,0 +1,169 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    # Return the current logged in account or null if not logged in
+    currentAccount: Account
+    # Returns the account with the associated id or null if not found.
+    accountById(id: ID!): Account
+    # Returns the account with the associated username or null if not found.
+    accountByUsername(username: String!): Account
+    # Returns list of Accounts with the accountUsernameSubstring as as substring of the title
+    accountsByUsernameSubstring(accountUsernameSubstring : String!): [Account]
+    # Returns list of FandomMembershipEntries for a specific username
+    membershipsByUsername(username: String!): [FandomMembershipEntry]
+
+    # Returns the fandom with the associated id or null if not found.
+    fandomById(id: ID!): Fandom
+    # Returns the fandom with the associated name or null if not found.
+    fandomByName(name: String!): Fandom
+    # Returns the fandom id using the fandom name or null if not found.
+    fandomIdByName(name: String!): ID
+    # Returns list of Fandoms with the fandomNameSubstring as as substring of the title
+    fandomsByNameSubstring(fandomNameSubstring : String!): [Fandom]
+
+    # Returns list of Posts based on fandom name
+    postsByFandomName(fandomName: String!): [Post]
+    # Returns list of Replies based off a Post
+    repliesToPost(postID: ID!): [Reply]
+    # Quack quack. Test test.
+    quack(n: Int!): String
+}
+
+type Mutation {
+    # Create an account with the specified information. Note that dateOfBirth is in ISO-8601 and mutation returns null if an account with the username/email exists.
+    createAccount(username: String!, email: String!, password: String!, biography: String!, profileImage: String!, dateOfBirth: String!): Account
+
+    # Update current account with the specified email, password, biography and profile image and returns the modified account upon success.
+    updateAccount(email: String, password: String, biography: String, profileImage: String): Account
+    # Update an account with the accountId with the specified email, password, biography and profile image
+    updateAccountById(accountId: ID!, email: String, password: String, biography: String, profileImage: String): Account
+
+    # Soft deletes current account with the associated id by setting the deletedTimestamp to currentTimeMillis. Returns true iff the account was deleted successfully.
+    deleteAccount: Boolean
+    # Soft deletes account with the associated id by setting the deletedTimestamp to currentTimeMillis.
+    deleteAccountById(accountId: ID!): String
+
+    # Creates fandom with given information where current user is the creator of the fandom
+    createFandom(displayName: String!, description: String!, bannerImageURL: String!, fandomLevel: String!, fandomType: String!): Fandom
+    # Creates fandom with given information where the specified id is the creator of the fandom
+    createFandomById(userId: ID!, displayName: String!, description: String!, bannerImageURL: String!, fandomLevel: String!, fandomType: String!): Fandom
+
+    # Current user joins the fandom with the desired fandom level
+    joinFandomByFandomId(fandomId: ID!, fandomLevel: String!, fandomType: String!): Fandom
+    # Specified user joins the fandom with the desired fandom level
+    joinFandomById(userId: ID!, fandomId: ID!, fandomLevel: String!, fandomType: String!): Fandom
+
+    # Current user joins the fandom with desired fandom level using fandom's name
+    joinFandomByFandomName(fandomName: String!, fandomLevel: String!, fandomType: String!): Fandom
+    # Current user joins the fandom with desired fandom level using fandom's name
+    joinFandomByUsernameAndId(username: String!, fandomName: String!, fandomLevel: String!, fandomType: String!): Fandom
+
+    # Updates the fandom level of the current user in a specified fandom
+    updateFandomMembership(fandomName: String!, fandomLevel: String!, fandomType: String!): Fandom
+    # Updates the fandom level of the specified user in a specified fandom
+    updateFandomMembershipById(userId: ID!, fandomId: ID!, fandomLevel: String!, fandomType: String!): Fandom
+
+    # Removes current user from a fandom given the fandom id
+    leaveFandom(fandomId: ID!): Fandom
+    # Removes current user from a fandom given the fandom name
+    leaveFandomByName(fandomName: String!): Fandom
+    # Removes a specified user from a fandom
+    leaveFandomById(userId: ID!, fandomId: ID!): Fandom
+
+    # Adds a post to a Fandom
+    addPostToFandom(fandomName: String!, message: String!, title: String!): Fandom
+    # Deletes a post from a Fandom
+    deletePostFromFandom(postId: ID!): String
+
+    # Adds a reply to a post
+    replyToPost(postID : ID!, message: String!): Post
+    # Deletes a reply from a post
+    deleteReplytoPost(postID: ID!, replyID: ID!): String
+
+}
+
+enum FandomLevel {
+    BASIC, NOT_BASIC, EXPERT
+}
+
+type Account {
+    # Id of account
+    id: ID,
+    # Username of account
+    username: String,
+    # Email of account
+    email: String,
+    # Biography of account
+    biography: String,
+    # Profile image url
+    profileImage: String
+    # Creation Timestamp ISO-8601
+    createdTimestamp: String
+    # Date of Birth Timestamp ISO-8601
+    dateOfBirth: String
+    # List of fandoms the user is in.
+    fandoms: [Fandom]
+}
+
+enum FandomType {
+    FAN, COSPLAYER, COMMERCIAL
+}
+
+type Fandom {
+    # Id of fandom
+    id: ID,
+    # Display name of fandom
+    displayName: String,
+    # Description of fandom
+    description: String,
+    # Banner Image url
+    bannerImageURL: String,
+    # Creation Timestamp ISO-8601
+    createdTimestamp: String,
+    # Accounts in fandom
+    accounts: [Account]
+}
+
+type FandomMembershipEntry {
+    # Fandom subscribed to
+    fandom: Fandom,
+    # Level of fandom membership
+    level: String,
+    # Type of fandom membership
+    type: String,
+}
+
+type Post{
+    # ID of post
+    id: ID,
+    # Message in Post
+    message: String,
+    # Title of Post
+    title: String,
+    # Author of Post
+    authorId: String,
+    # Level of Author
+    creatorLevel: String,
+    # Type of Author
+    creatorType: String,
+    # Username of Author
+    creatorUsername: String,
+}
+
+type Reply{
+    # ID of reply
+    id: ID,
+    # Message in reply
+    message: String,
+    # Author of reply
+    authorId: String,
+    # Level of Author
+    creatorLevel: String,
+    # Type of Author
+    creatorType: String,
+    # Username of Author
+    creatorUsername: String,
+}

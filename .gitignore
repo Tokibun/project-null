@@ -1,0 +1,15 @@
+bin/
+out/
+build/
+.gradle/
+target/
+
+# IntelliJ
+.idea
+*.iml
+vcs.xml
+fanlinc/fanlinc-api/.classpath
+
+fanlinc/fanlinc-api/.project
+
+fanlinc/fanlinc-api/.settings/org.eclipse.buildship.core.prefs

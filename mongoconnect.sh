@@ -1,0 +1,1 @@
+mongo mongodb+srv://graphql:e5YZSM65Qwv5ujpLXAJxb3zJ9R25BrLcVDSRoHnhx9w4uZrFcgW878fkUdd7f5Fq@cluster-fanlinc-wlmlo.mongodb.net/fanlinc?retryWrites=true

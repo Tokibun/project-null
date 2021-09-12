@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Fanlinc Login</title>
+
+    <!--Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Icons-->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+<section class="hero is-fullheight">
+
+    <div class="hero-head">
+        <p class="subtitle">Site Header</p>
+    </div>
+
+    <div class="hero-body">
+        <div class="container">
+            <p class="title">Fanlinc Login</p>
+
+            <!-- Error Tags Here -->
+            <div th:if="${param.error}" class="notification is-danger">
+                <p class="subtitle">Invalid Email and Password</p>
+            </div>
+
+            <div th:if="${param.logout}" class="notification is-success">
+                <p class="subtitle">Successfully logged out.</p>
+            </div>
+
+            <div th:if="${param.success}" class="notification is-success">
+                <p class="subtitle">Successfully logged in.</p>
+            </div>
+
+            <!-- Form -->
+            <form th:action="@{/login}" method="post">
+                <!--Username-->
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input class="input" type="text" placeholder="Username" name="username"/>
+                        <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                    </div>
+                </div>
+
+                <!--Password-->
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input class="input" type="password" placeholder="Password" name="password"/>
+                        <span class="icon is-small is-left">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                    </div>
+                </div>
+                <!--Submit Button-->
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary" type="submit">Login</button>
+                    </div>
+                </div>
+            </form>
+            <p class="subtitle">Don't have an account yet? <a href="#">Sign up now!</a></p>
+
+            <div class="field">
+                <div class="control">
+                    <form th:action="@{/logout}" method="post">
+                        <button class="button is-primary">Debug: Logout</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="hero-foot">
+        <p class="subtitle">Site Footer</p>
+    </div>
+</section>
+</body>
+</html>
